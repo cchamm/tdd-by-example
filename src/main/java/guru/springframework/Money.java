@@ -21,7 +21,7 @@ public class Money implements Expression {
     }
 
     public static Money franc(int amount) {
-        return new Money(amount, "CNF");
+        return new Money(amount, "CHF");
     }
 
     public boolean equals(Object object) {
@@ -38,17 +38,18 @@ public class Money implements Expression {
                 '}';
     }
 
-    public Money times(int multiplier) {
+    @Override
+    public Expression times(int multiplier) {
         return new Money(amount * multiplier, currency);
     }
 
-    public Expression plus(Money addend) {
+    @Override
+    public Expression plus(Expression addend) {
         return new Sum(this, addend);
     }
 
     @Override
     public Money reduce(Bank bank, String toCurrency) {
-//        int rate = (currency.equals("CNF") && toCurrency.equals("USD")) ? 2 : 1;
         int rate = bank.rate(currency, toCurrency);
         return new Money(amount / rate , toCurrency);
     }
